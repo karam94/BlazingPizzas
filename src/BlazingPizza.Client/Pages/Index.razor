@@ -2,11 +2,6 @@
 @inject HttpClient HttpClient
 
 <div class="main">
-    @if (showingConfigureDialog)
-    {
-        <ConfigurePizzaDialog Pizza="configuringPizza" />
-    }
-
     <ul class="pizza-cards">
         @if (specials != null)
         {
@@ -22,12 +17,18 @@
             }
         }
     </ul>
+
+    @if (showingConfigureDialog)
+    {
+        <ConfigurePizzaDialog Pizza="configuringPizza" OnCancel="CancelConfigurePizzaDialog" OnConfirm="ConfirmConfigurePizzaDialog" />
+    }
 </div>
 
 @code {
     List<PizzaSpecial> specials;
     Pizza configuringPizza;
     bool showingConfigureDialog = false;
+    Order order = new Order();
 
     // Lifecycle method
     protected override async Task OnInitializedAsync()
@@ -47,5 +48,19 @@
         };
 
         showingConfigureDialog = true;
+    }
+
+    void CancelConfigurePizzaDialog()
+    {
+        configuringPizza = null;
+        showingConfigureDialog = false;
+    }
+
+    void ConfirmConfigurePizzaDialog()
+    {
+        order.Pizzas.Add(configuringPizza);
+        configuringPizza = null;
+
+        showingConfigureDialog = false;
     }
 }
