@@ -4,7 +4,18 @@
             <h2>@Pizza.Special.Name</h2>
             @Pizza.Special.Description
         </div>
-        <form class="dialog-body"></form>
+
+        <form class="dialog-body">
+            <div>
+                <label>Size:</label>
+                <!-- bind:event triggers the bind to update whenever the oninput event is triggered. This way the price updates as we drag the slider, rather than when only we release it. -->
+                <input type="range" min="@Pizza.MinimumSize" max="@Pizza.MaximumSize" step="1" @bind="Pizza.Size" @bind:event="oninput" />
+                <span class="size-label">
+                    @(Pizza.Size)" (£@(Pizza.GetFormattedTotalPrice()))
+                </span>
+            </div>
+        </form>
+
         <div class="dialog-buttons">
             <button class="btn btn-secondary mr-auto">Cancel</button>
             <span class="mr-center">
