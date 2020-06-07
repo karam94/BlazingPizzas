@@ -2,12 +2,17 @@
 @inject HttpClient HttpClient
 
 <div class="main">
+    @if (showingConfigureDialog)
+    {
+        <ConfigurePizzaDialog Pizza="configuringPizza" />
+    }
+
     <ul class="pizza-cards">
         @if (specials != null)
         {
             @foreach (var special in specials)
             {
-                <li style="background-image: url('@special.ImageUrl')">
+                <li @onclick="@(() => ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
                     <div class="pizza-info">
                         <span class="title">@special.Name</span>
                         @special.Description
@@ -21,11 +26,26 @@
 
 @code {
     List<PizzaSpecial> specials;
+    Pizza configuringPizza;
+    bool showingConfigureDialog = false;
 
     // Lifecycle method
     protected override async Task OnInitializedAsync()
     {
         // GET queries "/specials"
         specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>("specials");
+    }
+
+    void ShowConfigurePizzaDialog(PizzaSpecial special)
+    {
+        configuringPizza = new Pizza()
+        {
+            Special = special,
+            SpecialId = special.Id,
+            Size = Pizza.DefaultSize,
+            Toppings = new List<PizzaTopping>(),
+        };
+
+        showingConfigureDialog = true;
     }
 }
