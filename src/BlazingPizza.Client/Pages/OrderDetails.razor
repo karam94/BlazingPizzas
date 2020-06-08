@@ -1,6 +1,7 @@
 ﻿@page "/myorders/{orderId:int}"
 @using System.Threading
 @inject HttpClient HttpClient
+@implements IDisposable
 
 <div class="main">
     @if (invalidOrder)
@@ -79,5 +80,11 @@
                 StateHasChanged(); // Tells Blazor to re-render the component, in this case because something has gone wrong.
             }
         }
+    }
+
+    // Must remember to dispose of the component once done for performance
+    void IDisposable.Dispose()
+    {
+        pollingCancellationToken?.Cancel();
     }
 }
