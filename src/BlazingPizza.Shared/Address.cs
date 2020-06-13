@@ -16,6 +16,7 @@ namespace BlazingPizza
         public string Line2 { get; set; }
 
         [Required, MaxLength(50)]
+        // Custom validation error messages: [Required(ErrorMessage = "How do you expect to receive the pizza if we don't even know what city you're in?"), MaxLength(50)]
         public string City { get; set; }
 
         [Required, MaxLength(20)]
